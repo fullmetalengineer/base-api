@@ -1,2 +1,4 @@
 web: bundle exec puma -t 2:16 -p ${PORT:-3000}
 release: bundle exec rake db:migrate
+mainworker: bundle exec sidekiq -e production -c 10 -q critical -q default
+communicationworker: bundle exec sidekiq -e production -c 10 -q communication
