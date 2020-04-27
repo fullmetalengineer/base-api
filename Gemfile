@@ -25,6 +25,7 @@ gem 'bcrypt', '~> 3.1.7'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
+# ==================== Rack Gems ====================
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 gem 'rack-attack'
@@ -36,6 +37,9 @@ gem 'sidekiq-scheduler'
 # ==================== Communication Gems ====================
 gem 'twilio-ruby'
 gem 'sendgrid-ruby'
+
+# ==================== Miscellaneous Gems ====================
+gem 'to_bool'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
