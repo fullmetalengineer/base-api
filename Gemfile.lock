@@ -218,7 +218,7 @@ DEPENDENCIES
   sidekiq-scheduler
   spring
   spring-watcher-listen (~> 2.0.0)
-  to_bool
+  to_bool (~> 2.0)
   twilio-ruby
   tzinfo-data
 
