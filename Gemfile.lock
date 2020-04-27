@@ -195,6 +195,7 @@ DEPENDENCIES
   rack-attack
   rack-cors
   rails (~> 5.2.3)
+  redis (~> 4.0)
   sendgrid-ruby
   sidekiq
   sidekiq-scheduler
