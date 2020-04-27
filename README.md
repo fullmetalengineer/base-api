@@ -1,21 +1,3 @@
-# README
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* Deployment instructions
-
-* ...
-
 # Base API
 
 This repo is the base of the Rails API starter I typically begin applications with. I will be expanding on it as I have time. It is built on Ruby 2.6.5 and Rails 6.0.2. I will be keeping it up-to-date as best I can.
