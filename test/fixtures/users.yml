@@ -19,16 +19,16 @@
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  first_name: MyString
-  last_name: MyString
-  email: MyString
-  password_digest: MyString
-  token: MyString
+alan:
+  first_name: Alan
+  last_name: Long
+  email: alan.d.long@outlook.com
+  password_digest: asdfaklqwbkjh2g3423jhrg5k2j34
+  token: ljsdbfajsdbfasjkndfaljkfnajsdf
 
-two:
-  first_name: MyString
-  last_name: MyString
-  email: MyString
-  password_digest: MyString
-  token: MyString
+zach:
+  first_name: Zach
+  last_name: Young
+  email: zach@codefiworks.com
+  password_digest: lasjhgfjq3hrwlrh3lh3k4
+  token: h234j2hj5j3h45k2jh4g5k2hj34
