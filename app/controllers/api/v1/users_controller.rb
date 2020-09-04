@@ -15,7 +15,6 @@ module Api
 
       def logout
         result = AppServices::AuthService.logout(@current_user)
-
         unless result.success?
           render json: { error: 'There was a problem logging out' }, status: :unprocessable_entity and return
         end
