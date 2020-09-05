@@ -17,8 +17,11 @@
 #  index_users_on_token  (token)
 #
 
+# The model that represents the User
 class User < ApplicationRecord
   has_secure_password
+  has_many :user_roles
+  has_many :roles, through: :user_roles
 
   validates :email, uniqueness: true
 
@@ -26,12 +29,16 @@ class User < ApplicationRecord
     update_attribute :token, AppServices::AccessToken.generate(self)
   end
 
+  def role?(role)
+    roles.any? { |r| r.slug.underscore.to_sym == role }
+  end
+
   def profile
     {
-      first_name: self.first_name,
-      last_name: self.last_name,
-      token: self.token,
-      email: self.email
+      first_name: first_name,
+      last_name: last_name,
+      token: token,
+      email: email
     }
   end
 end

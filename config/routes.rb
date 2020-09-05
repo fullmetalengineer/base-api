@@ -17,12 +17,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       namespace :users do
         post :login
-        post :signup
-        get :me
         delete :logout
-        post :update_password
-        post :password_reset
-        post :confirm_password_reset
+        get :me
       end
     end
   end
