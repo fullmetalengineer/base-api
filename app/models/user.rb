@@ -36,7 +36,7 @@ class User < ApplicationRecord
   def name
     "#{first_name} #{last_name}"
   end
-  
+
   def profile
     {
       first_name: first_name,
