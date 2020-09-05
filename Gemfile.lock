@@ -60,6 +60,7 @@ GEM
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 14.0)
     bcrypt (3.1.15)
+    blueprinter (0.25.1)
     bootsnap (1.4.7)
       msgpack (~> 1.0)
     builder (3.2.4)
@@ -103,6 +104,8 @@ GEM
     nio4r (2.5.2)
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
+    oj (3.10.8)
+    oj_mimic_json (1.0.1)
     pg (1.2.3)
     puma (4.3.5)
       nio4r (~> 2.0)
@@ -197,9 +200,12 @@ DEPENDENCIES
   activesupport (>= 6.0.3.1)
   annotate
   bcrypt (~> 3.1.7)
+  blueprinter
   bootsnap (>= 1.1.0)
   byebug
   listen (>= 3.0.5, < 3.2)
+  oj
+  oj_mimic_json
   pg (>= 0.18, < 2.0)
   puma (>= 4.3.5)
   rack (>= 2.2.3)

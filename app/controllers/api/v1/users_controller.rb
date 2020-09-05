@@ -10,7 +10,7 @@ module Api
         result = AppServices::AuthService.login(params[:email], params[:password])
         render json: { error: 'User not authenticated' }, status: 401 and return unless result.success?
 
-        render json: result.payload.profile, status: :ok
+        render json: { success: true, payload: UserBlueprint.render_as_hash(result.payload, view: :login) }, status: :ok
       end
 
       def logout
@@ -23,7 +23,7 @@ module Api
       end
 
       def me
-        render json: @current_user.profile, status: :ok
+        render json: UserBlueprint.render(@current_user, view: :normal), status: :ok
       end
     end
   end

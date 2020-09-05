@@ -33,6 +33,10 @@ class User < ApplicationRecord
     roles.any? { |r| r.slug.underscore.to_sym == role }
   end
 
+  def name
+    "#{first_name} #{last_name}"
+  end
+  
   def profile
     {
       first_name: first_name,
