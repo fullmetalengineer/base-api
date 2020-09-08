@@ -33,6 +33,40 @@ class User < ApplicationRecord
     roles.any? { |r| r.slug.underscore.to_sym == role }
   end
 
+  def add_role(role)
+    if role.class.name.to_sym != :Symbol
+      return AppServices::ServiceContract.sign(success: false, payload: nil, errors: 'Role must be a symbol')
+    end
+
+    unless Role.valid_role?(role)
+      return AppServices::ServiceContract.sign(
+        success: false, payload: nil, errors: "Role of type '#{role}' is not available."
+      )
+    end
+
+    roles << Role.find_by_slug(role)
+    AppServices::ServiceContract.sign(success: true, payload: roles, errors: nil)
+  end
+
+  def remove_role(role)
+    if role.class.name.to_sym != :Symbol
+      return AppServices::ServiceContract.sign(success: false, payload: nil, errors: 'Role must be a symbol')
+    end
+
+    unless Role.valid_role?(role)
+      return AppServices::ServiceContract.sign(
+        success: false, payload: nil, errors: "Role of type '#{role}' is not available."
+      )
+    end
+
+    role = Role.find_by_slug(role)
+    if user_roles.where(role: role).destroy_all
+      AppServices::ServiceContract.sign(success: true, payload: nil, errors: nil)
+    else
+      AppServices::ServiceContract.sign(success: false, payload: nil, errors: "Could not destroy #{role}")
+    end
+  end
+
   def name
     "#{first_name} #{last_name}"
   end
