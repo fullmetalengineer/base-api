@@ -8,3 +8,23 @@
 
 Role.create(slug: 'admin')
 Role.create(slug: 'user')
+
+alan = User.create(
+  first_name: 'Alan',
+  last_name: 'Long',
+  email: 'alan.d.long@protonmail.com',
+  password: 'qwerty',
+  password_confirmation: 'qwerty'
+)
+# Give Alan the admin role
+alan.add_role(:admin)
+
+# Create Zach
+zach = User.create(
+  first_name: 'Zach',
+  last_name: 'Young',
+  email: 'zach@codefiworks.com',
+  password: 'qwerty',
+  password_confirmation: 'qwerty'
+)
+zach.add_role(:admin)
