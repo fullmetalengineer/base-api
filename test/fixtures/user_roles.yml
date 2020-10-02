@@ -1,9 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  user: one
-  role: one
+  user: alan
+  role: admin
 
 two:
-  user: two
-  role: two
+  user: zach
+  role: user

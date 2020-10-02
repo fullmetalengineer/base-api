@@ -44,7 +44,8 @@ class User < ApplicationRecord
       )
     end
 
-    roles << Role.find_by_slug(role)
+    target_role = Role.find_by_slug(role)
+    roles << target_role unless roles.include?(target_role)
     AppServices::ServiceContract.sign(success: true, payload: roles, errors: nil)
   end
 
