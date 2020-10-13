@@ -10,19 +10,3 @@ production:
 :scheduler:
   # Tells Sidekiq that for each worker process to only listen to the queues I tell it to in the launch Procfile
   :listened_queues_only: true
-
-:schedule:
-  # =========== Every N seconds/minutes ===========
-  # name_of_job:
-  #   every: ['30s', first_in: '30s']
-  #   class: name_of_worker_class
-    # Description of job
-
-
-  
-  # =========== Daily ===========
-  # Time scheduled to run in words
-  # name_of-job:
-  #   cron: '0 2 * * * America/Chicago' # Runs on the 2nd hour every day on Central time
-  #   class: name_of_worker_class
-    # Description of job
