@@ -8,6 +8,14 @@ module AppServices
       OpenStruct.new({ success?: success, payload: payload, errors: convert_to_custom_error(errors) })
     end
 
+    def self.success(payload)
+      OpenStruct.new({ success?: true, payload: payload, errors: convert_to_custom_error(nil) })
+    end
+
+    def self.error(errors)
+      OpenStruct.new({ success?: false, payload: nil, errors: convert_to_custom_error(errors) })
+    end
+
     # Convert a string, an array of strings, or a model's errors to a CustomError instance
     def self.convert_to_custom_error(errors)
       case errors.class.name.to_sym
