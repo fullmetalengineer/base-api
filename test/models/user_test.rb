@@ -50,7 +50,7 @@ class UserTest < ActiveSupport::TestCase
       password: 'MyPassword'
     )
 
-    login_result = AppServices::AuthService.login(result.email, 'MyPassword')
+    login_result = BaseApi::Auth.login(result.email, 'MyPassword')
     assert login_result.success?
     assert login_result.payload.class.name.to_sym == :User
   end
@@ -63,13 +63,13 @@ class UserTest < ActiveSupport::TestCase
       password: 'MyPassword'
     )
 
-    login_result = AppServices::AuthService.login(result.email, 'MyPassword')
+    login_result = BaseApi::Auth.login(result.email, 'MyPassword')
     assert login_result.success?
     assert login_result.payload.class.name.to_sym == :User
 
-    logout_result = AppServices::AuthService.logout(login_result.payload)
+    logout_result = BaseApi::Auth.logout(login_result.payload)
     assert logout_result.success?
-    assert logout_result.payload.nil?
+    assert logout_result.payload
   end
 
   # ====================================== ROLES ======================================

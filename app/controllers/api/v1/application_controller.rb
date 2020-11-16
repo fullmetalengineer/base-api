@@ -31,4 +31,18 @@ class Api::V1::ApplicationController < ActionController::API
 
     render json: { message: "Missing required parameters: #{errors.to_sentence}" }, status: :bad_request and return unless count.zero?
   end
+
+  def render_error(errors:, status:)
+    render json: {
+      success: false,
+      errors: errors
+    }, status: status
+  end
+
+  def render_success(payload:, status:)
+    render json: {
+      success: true,
+      payload: payload
+    }, status: status
+  end
 end

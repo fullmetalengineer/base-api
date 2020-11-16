@@ -7,23 +7,22 @@ module Api
       skip_before_action :authenticate, only: %i[login create]
 
       def login
-        result = AppServices::AuthService.login(params[:email], params[:password])
-        render json: { error: 'User not authenticated' }, status: 401 and return unless result.success?
+        result = BaseApi::Auth.login(params[:email], params[:password])
+        render_error(errors: 'User not authenticated', status: 401) and return unless result.success?
 
-        render json: { success: true, payload: UserBlueprint.render_as_hash(result.payload, view: :login) }, status: :ok
+        payload = UserBlueprint.render_as_hash(result.payload, view: :login)
+        render_success(payload: payload, status: :ok)
       end
 
       def logout
-        result = AppServices::AuthService.logout(@current_user)
-        unless result.success?
-          render json: { error: 'There was a problem logging out' }, status: :unprocessable_entity and return
-        end
+        result = BaseApi::Auth.logout(@current_user)
+        render_error(errors: 'There was a problem logging out', status: :unprocessable_entity) and return unless result.success?
 
-        render json: { success: 'You have been logged out' }, status: :ok
+        render_success(Payload: 'You have been logged out', status: :ok)
       end
 
       def me
-        render json: UserBlueprint.render(@current_user, view: :normal), status: :ok
+        render_success(payload: UserBlueprint.render(@current_user, view: :normal), status: :ok)
       end
     end
   end

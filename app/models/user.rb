@@ -26,7 +26,7 @@ class User < ApplicationRecord
   validates :email, uniqueness: true
 
   def generate_token!
-    update_attribute :token, AppServices::AccessToken.generate(self)
+    update_attribute :token, BaseApi::AccessToken.generate(self)
   end
 
   def role?(role)
@@ -34,50 +34,27 @@ class User < ApplicationRecord
   end
 
   def add_role(role)
-    if role.class.name.to_sym != :Symbol
-      return AppServices::ServiceContract.sign(success: false, payload: nil, errors: 'Role must be a symbol')
-    end
-
-    unless Role.valid_role?(role)
-      return AppServices::ServiceContract.sign(
-        success: false, payload: nil, errors: "Role of type '#{role}' is not available."
-      )
-    end
+    return ServiceContract.error('Role must be a symbol') if role.class.name.to_sym != :Symbol
+    return ServiceContract.error("Role of type '#{role}' is not available.") unless Role.valid_role?(role)
 
     target_role = Role.find_by_slug(role)
     roles << target_role unless roles.include?(target_role)
-    AppServices::ServiceContract.sign(success: true, payload: roles, errors: nil)
+    ServiceContract.success(roles)
   end
 
   def remove_role(role)
-    if role.class.name.to_sym != :Symbol
-      return AppServices::ServiceContract.sign(success: false, payload: nil, errors: 'Role must be a symbol')
-    end
-
-    unless Role.valid_role?(role)
-      return AppServices::ServiceContract.sign(
-        success: false, payload: nil, errors: "Role of type '#{role}' is not available."
-      )
-    end
+    return ServiceContract.error('Role must be a symbol') if role.class.name.to_sym != :Symbol
+    return ServiceContract.error("Role of type '#{role}' is not available.") unless Role.valid_role?(role)
 
     role = Role.find_by_slug(role)
     if user_roles.where(role: role).destroy_all
-      AppServices::ServiceContract.sign(success: true, payload: nil, errors: nil)
+      ServiceContract.sign(success: true, payload: nil, errors: nil)
     else
-      AppServices::ServiceContract.sign(success: false, payload: nil, errors: "Could not destroy #{role}")
+      ServiceContract.sign(success: false, payload: nil, errors: "Could not destroy #{role}")
     end
   end
 
   def name
     "#{first_name} #{last_name}"
-  end
-
-  def profile
-    {
-      first_name: first_name,
-      last_name: last_name,
-      token: token,
-      email: email
-    }
   end
 end
