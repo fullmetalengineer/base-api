@@ -11,18 +11,18 @@ module Api
         render_error(errors: 'User not authenticated', status: 401) and return unless result.success?
 
         payload = UserBlueprint.render_as_hash(result.payload, view: :login)
-        render_success(payload: payload, status: :ok)
+        render_success(payload: payload)
       end
 
       def logout
         result = BaseApi::Auth.logout(@current_user)
         render_error(errors: 'There was a problem logging out', status: :unprocessable_entity) and return unless result.success?
 
-        render_success(Payload: 'You have been logged out', status: :ok)
+        render_success(Payload: 'You have been logged out')
       end
 
       def me
-        render_success(payload: UserBlueprint.render(@current_user, view: :normal), status: :ok)
+        render_success(payload: UserBlueprint.render(@current_user, view: :normal))
       end
     end
   end

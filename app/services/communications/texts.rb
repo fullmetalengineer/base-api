@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require 'twilio-ruby'
-module CommsService
+module Communications
   # Communicates with our configured text messaging platform
-  module TextMessage
-    def self.message(to, message)
+  module Texts
+    def self.deliver(to, message)
       # Fire off the worker
       TwilioWorker.perform_async(to, message)
     end
