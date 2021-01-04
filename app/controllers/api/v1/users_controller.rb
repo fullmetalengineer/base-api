@@ -22,7 +22,7 @@ module Api
       end
 
       def me
-        render_success(payload: UserBlueprint.render(@current_user, view: :normal))
+        render_success(payload: UserBlueprint.render(@current_user))
       end
     end
   end
