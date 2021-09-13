@@ -3,7 +3,7 @@
 module BaseApi
   # Handles user authentication (login, logout)
   module Auth
-    def self.login(email, password)
+    def self.login(email, password, ip)
       # will return nil if no user found, will return false if the try authenticate doesn't work
       user = User.find_by(email: email).try(:authenticate, password)
 
@@ -14,12 +14,12 @@ module BaseApi
       return ServiceContract.error('Incorrect password') unless user
 
       # generate the token on the user obj
-      user.generate_token!
-      ServiceContract.success(user)
+      token = user.generate_token!(ip)
+      ServiceContract.success({user: user, token: token})
     end
 
-    def self.logout(user)
-      return ServiceContract.success(true) if user.update(token: nil)
+    def self.logout(user, token)
+      return ServiceContract.success(true) if user && token.update(revocation_date: DateTime.now)
 
       ServiceContract.error('Error logging user out')
     end

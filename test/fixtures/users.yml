@@ -24,11 +24,9 @@ alan:
   last_name: Long
   email: alan.d.long@outlook.com
   password_digest: asdfaklqwbkjh2g3423jhrg5k2j34
-  token: ljsdbfajsdbfasjkndfaljkfnajsdf
 
 zach:
   first_name: Zach
   last_name: Young
   email: zach@codefiworks.com
   password_digest: lasjhgfjq3hrwlrh3lh3k4
-  token: h234j2hj5j3h45k2jh4g5k2hj34

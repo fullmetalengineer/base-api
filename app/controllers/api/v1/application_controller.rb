@@ -8,9 +8,19 @@ class Api::V1::ApplicationController < ActionController::API
   end
 
   def authenticate_token
+    @ip = request.remote_ip || 'unknown'
     authenticate_with_http_token do |token, _options|
-      @current_user = User.find_by(token: token)
-      @current_user
+      @token = Token.find_by(value: token)
+      if @token.nil?
+        render_unauthorized
+      else
+        if @token.expiry.after?(DateTime.now) && @token.revocation_date.blank?
+          @current_user = @token.user
+          @current_user
+        else
+          render_unauthorized
+        end
+      end
     end
   end
 

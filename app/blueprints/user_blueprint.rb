@@ -6,6 +6,8 @@ class UserBlueprint < Blueprinter::Base
   fields :first_name, :last_name, :name, :email
 
   view :login do
-    field :token
+    association :token, blueprint: TokenBlueprint do |user, _options|
+      user.tokens.last
+    end
   end
 end

@@ -19,39 +19,54 @@
 
 # The model that represents the User
 class User < ApplicationRecord
-  has_secure_password
+  include BaseApi::Roles
+  has_secure_password validations: false
+  has_many :tokens
   has_many :user_roles
   has_many :roles, through: :user_roles
 
   validates :email, uniqueness: true
 
-  def generate_token!
-    update_attribute :token, BaseApi::AccessToken.generate(self)
+  scope :invite_not_expired, -> { where('invitation_expiration > ?', DateTime.now) }
+  scope :invite_token_is, ->(invitation_token) { where(invitation_token: invitation_token) }
+
+  # Callbacks
+  before_create :generate_invitation_token
+  before_save :generate_invitation_token, if: :will_save_change_to_invitation_token?
+  after_commit :invite_user, if: :saved_change_to_invitation_token?
+
+  def generate_token!(ip)
+    token = Token.create(
+      value: BaseApi::AccessToken.generate(self),
+      user_id: id,
+      expiry: DateTime.current + 7.days,
+      ip: ip
+    )
   end
 
-  def role?(role)
-    roles.any? { |r| r.slug.underscore.to_sym == role }
-  end
-
-  def add_role(role)
-    return ServiceContract.error('Role must be a symbol') if role.class.name.to_sym != :Symbol
-    return ServiceContract.error("Role of type '#{role}' is not available.") unless Role.valid_role?(role)
-
-    target_role = Role.find_by_slug(role)
-    roles << target_role unless roles.include?(target_role)
-    ServiceContract.success(roles)
-  end
-
-  def remove_role(role)
-    return ServiceContract.error('Role must be a symbol') if role.class.name.to_sym != :Symbol
-    return ServiceContract.error("Role of type '#{role}' is not available.") unless Role.valid_role?(role)
-
-    role = Role.find_by_slug(role)
-    if user_roles.where(role: role).destroy_all
-      ServiceContract.sign(success: true, payload: nil, errors: nil)
-    else
-      ServiceContract.sign(success: false, payload: nil, errors: "Could not destroy #{role}")
+  def generate_invitation_token
+    self.invitation_expiration = DateTime.current + 7.day
+    loop do
+      # Once we have a random, test whether it is unique in the DB
+      self.invitation_token = SecureRandom.alphanumeric(15)
+      break unless self.class.exists?(invitation_token: invitation_token)
     end
+  end
+
+  def invitation_accepted_at!
+    update(invitation_accepted: true, invitation_token: nil, invitation_expiration: nil)
+  end
+
+  def invitation_link
+    throw "Environment Variable Not Found Error" if ENV['REGISTRATION_URL'].nil?
+
+    url = ENV['REGISTRATION_URL']
+    "#{url}#{invitation_token}"
+  end
+
+  def invite_user
+    # Email the user a link with the invitation_token
+    InvitationWorker.perform_async(id)
   end
 
   def name
