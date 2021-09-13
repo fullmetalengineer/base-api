@@ -28,7 +28,7 @@ class UserTest < ActiveSupport::TestCase
     alan_user.email = zach_user.email
 
     assert_not alan_user.save, 'Was able to create a non-unique email in the database on a user'
-    assert alan_user.errors.keys.include?(:email), 'Saving a user with a non-unique email did not generate a model error'
+    assert alan_user.errors.attribute_names.include?(:email), 'Saving a user with a non-unique email did not generate a model error'
   end
 
   test "that calling generate_token! updates the user's token value in the database" do
