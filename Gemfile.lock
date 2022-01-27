@@ -185,7 +185,7 @@ GEM
       fugit (~> 1.1, >= 1.1.6)
     sendgrid-ruby (6.5.1)
       ruby_http_client (~> 3.4)
-    sidekiq (6.2.2)
+    sidekiq (6.4.0)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
