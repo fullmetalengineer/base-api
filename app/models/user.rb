@@ -20,18 +20,22 @@
 # The model that represents the User
 class User < ApplicationRecord
   include BaseApi::Roles
-  has_secure_password validations: false
+  has_secure_password
   has_many :tokens
   has_many :user_roles
   has_many :roles, through: :user_roles
 
-  validates :email, uniqueness: true
+  validates :email, 
+    format: { with: URI::MailTo::EMAIL_REGEXP },
+    uniqueness: { case_sensitive: false },
+    presence: true
 
   scope :invite_not_expired, -> { where('invitation_expiration > ?', DateTime.now) }
   scope :invite_token_is, ->(invitation_token) { where(invitation_token: invitation_token) }
 
   # Callbacks
   before_create :generate_invitation_token
+  before_save { self.email = email.downcase }
   before_save :generate_invitation_token, if: :will_save_change_to_invitation_token?
   after_commit :invite_user, if: :saved_change_to_invitation_token?
 
