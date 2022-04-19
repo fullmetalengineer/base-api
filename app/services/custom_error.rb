@@ -33,14 +33,14 @@ class CustomError
 
   def convert(errors)
     class_type = errors.class.to_s
-    messages = []
-    # Convert to a messages array based on the type passed in
-    # If it's an active model's errors object
-    messages = errors.full_messages if class_type == "ActiveModel::Errors"
-    # If it's an array
-    messages = errors if class_type == "Array"
-    # If it's any active model object
-    messages = errors&.errors&.full_messages || [] unless class_type.in?(%w[Array ActiveModel::Errors])
+    messages =  case class_type
+                when "ActiveModel::Errors"
+                  errors.full_messages
+                when "Array"
+                  errors
+                else
+                  errors&.errors&.full_messages || []
+                end
 
     # Loop over the messages, adding them to the @errors array
     messages.each { |error| @errors << error }

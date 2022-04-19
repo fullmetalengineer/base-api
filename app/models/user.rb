@@ -42,8 +42,8 @@ class User < ApplicationRecord
   after_commit :invite_user, if: :saved_change_to_invitation_token?
 
   def generate_token!(ip)
-    token = Token.create(
-      value: BaseApi::AccessToken.generate(self),
+    Token.create(
+      value: BaseApi::AccessToken.generate,
       user_id: id,
       expiry: DateTime.current + 7.days,
       ip: ip
