@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -25,12 +27,12 @@ class User < ApplicationRecord
   has_many :user_roles
   has_many :roles, through: :user_roles
 
-  validates :email, 
-    format: { with: URI::MailTo::EMAIL_REGEXP },
-    uniqueness: { case_sensitive: false },
-    presence: true
+  validates :email,
+            format: { with: URI::MailTo::EMAIL_REGEXP },
+            uniqueness: { case_sensitive: false },
+            presence: true
 
-  scope :invite_not_expired, -> { where('invitation_expiration > ?', DateTime.now) }
+  scope :invite_not_expired, -> { where("invitation_expiration > ?", DateTime.now) }
   scope :invite_token_is, ->(invitation_token) { where(invitation_token: invitation_token) }
 
   # Callbacks
@@ -62,9 +64,9 @@ class User < ApplicationRecord
   end
 
   def invitation_link
-    throw "Environment Variable Not Found Error" if ENV['REGISTRATION_URL'].nil?
+    throw "Environment Variable Not Found Error" if ENV["REGISTRATION_URL"].nil?
 
-    url = ENV['REGISTRATION_URL']
+    url = ENV["REGISTRATION_URL"]
     "#{url}#{invitation_token}"
   end
 

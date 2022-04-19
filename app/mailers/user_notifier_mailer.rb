@@ -2,7 +2,7 @@
 
 # Invite User to Register
 class UserNotifierMailer < ApplicationMailer
-  default from: 'fillthisout@mysite.com'
+  default from: "fillthisout@mysite.com"
 
   # send signup email to user
   def send_signup_email(user)

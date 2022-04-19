@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class InvitationWorker
   include Sidekiq::Worker
-  sidekiq_options queue: 'communication'
+  sidekiq_options queue: "communication"
 
   def perform(id)
     user = User.find(id)

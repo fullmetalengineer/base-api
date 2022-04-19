@@ -10,7 +10,7 @@ module BaseApi
 
     # Handles adding a role to a user
     def add_role(role)
-      return ServiceContract.error('Role must be a symbol') if role.class.name.to_sym != :Symbol
+      return ServiceContract.error("Role must be a symbol") if role.class.name.to_sym != :Symbol
 
       return ServiceContract.error("Role type '#{role}' is not available.") unless Role.valid_role?(role)
 
@@ -21,7 +21,7 @@ module BaseApi
 
     # Handles removing a role from a user
     def remove_role(role)
-      return ServiceContract.error('Role must be a symbol') if role.class.name.to_sym != :Symbol
+      return ServiceContract.error("Role must be a symbol") if role.class.name.to_sym != :Symbol
 
       return ServiceContract.error("Role type '#{role}' is not available.") unless Role.valid_role?(role)
 

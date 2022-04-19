@@ -4,7 +4,7 @@
 #
 # Methods: add(message), size, none?, all, as_sentence, convert
 class CustomError
-  def initialize(message = nil)
+  def initialize(message=nil)
     @errors = []
     @errors << message unless message.blank?
   end
@@ -36,9 +36,9 @@ class CustomError
     messages = []
     # Convert to a messages array based on the type passed in
     # If it's an active model's errors object
-    messages = errors.full_messages if class_type == 'ActiveModel::Errors'
+    messages = errors.full_messages if class_type == "ActiveModel::Errors"
     # If it's an array
-    messages = errors if class_type == 'Array'
+    messages = errors if class_type == "Array"
     # If it's any active model object
     messages = errors&.errors&.full_messages || [] unless class_type.in?(%w[Array ActiveModel::Errors])
 
@@ -50,6 +50,6 @@ class CustomError
   private
 
   def raise_if_no_message_provided(message)
-    raise 'Must provide usable error message!' if message.blank?
+    raise "Must provide usable error message!" if message.blank?
   end
 end

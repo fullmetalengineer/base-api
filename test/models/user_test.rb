@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -17,18 +19,18 @@
 #  index_users_on_token  (token)
 #
 
-require 'test_helper'
+require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
   # ====================================== VALIDATIONS ======================================
-  test 'that each user must have a unique email' do
+  test "that each user must have a unique email" do
     alan_user = users(:alan)
     zach_user = users(:zach)
 
     alan_user.email = zach_user.email
 
-    assert_not alan_user.save, 'Was able to create a non-unique email in the database on a user'
-    assert alan_user.errors.attribute_names.include?(:email), 'Saving a user with a non-unique email did not generate a model error'
+    assert_not alan_user.save, "Was able to create a non-unique email in the database on a user"
+    assert alan_user.errors.attribute_names.include?(:email), "Saving a user with a non-unique email did not generate a model error"
   end
 
   # test "that calling generate_token! updates the user's token value in the database" do
@@ -42,34 +44,33 @@ class UserTest < ActiveSupport::TestCase
 
   # ====================================== AUTH ======================================
 
-  test 'logging in a user works' do
+  test "logging in a user works" do
     result = User.create(
-      first_name: 'test',
-      last_name: 'account',
-      email: 'test@test.com',
-      password: 'MyPassword'
+      first_name: "test",
+      last_name: "account",
+      email: "test@test.com",
+      password: "MyPassword"
     )
 
-    login_result = BaseApi::Auth.login(result.email, 'MyPassword', '1.1.1.1')
+    login_result = BaseApi::Auth.login(result.email, "MyPassword", "1.1.1.1")
     assert login_result.success?
     assert login_result.payload[:user].class.name.to_sym == :User
   end
 
-  test 'logging out a user works' do
+  test "logging out a user works" do
     result = User.create(
-      first_name: 'test',
-      last_name: 'account',
-      email: 'test@test.com',
-      password: 'MyPassword'
+      first_name: "test",
+      last_name: "account",
+      email: "test@test.com",
+      password: "MyPassword"
     )
 
-    login_result = BaseApi::Auth.login(result.email, 'MyPassword', '1.1.1.1')
+    login_result = BaseApi::Auth.login(result.email, "MyPassword", "1.1.1.1")
     user = login_result.payload[:user]
     token = login_result.payload[:token]
 
     assert login_result.success?
     assert user.class.name.to_sym == :User
-
 
     logout_result = BaseApi::Auth.logout(user, token)
     assert logout_result.success?
@@ -78,35 +79,35 @@ class UserTest < ActiveSupport::TestCase
 
   # ====================================== ROLES ======================================
 
-  test 'giving a user a role works' do
+  test "giving a user a role works" do
     zach = users(:zach)
     role_result = zach.add_role(:admin)
 
-    assert role_result.success?, 'did not successfully give user Zach the Admin role'
+    assert role_result.success?, "did not successfully give user Zach the Admin role"
     assert role_result.errors.none?, "error when assigning user Zach the admin role: #{role_result.errors.as_sentence}"
   end
 
-  test 'removing a role from a user works' do
+  test "removing a role from a user works" do
     zach = users(:zach)
     role_result = zach.remove_role(:user)
 
-    assert role_result.success?, 'did not successfully remove the user role from Zach'
+    assert role_result.success?, "did not successfully remove the user role from Zach"
     assert role_result.errors.none?, "error when removing user role from Zach: #{role_result.errors.as_sentence}"
   end
 
-  test 'giving a user the same role multiple times is ok' do
+  test "giving a user the same role multiple times is ok" do
     zach = users(:zach)
     role_result = zach.add_role(:user)
 
-    assert role_result.success?, 'did not error when assigning the same role multiple times'
+    assert role_result.success?, "did not error when assigning the same role multiple times"
     assert role_result.errors.none?, "error when assigning the same role multiple times: #{role_result.errors.as_sentence}"
   end
 
-  test 'removing a role the user does not have does not result in an error' do
+  test "removing a role the user does not have does not result in an error" do
     zach = users(:zach)
     role_result = zach.remove_role(:admin)
 
-    assert role_result.success?, 'error when removing a role the user didnt have'
+    assert role_result.success?, "error when removing a role the user didnt have"
     assert role_result.errors.none?, "error when removing a role the user didnt have: #{role_result.errors.as_sentence}"
   end
 end

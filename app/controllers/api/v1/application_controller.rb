@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
@@ -8,26 +10,24 @@ class Api::V1::ApplicationController < ActionController::API
   end
 
   def authenticate_token
-    @ip = request.remote_ip || 'unknown'
+    @ip = request.remote_ip || "unknown"
     authenticate_with_http_token do |token, _options|
       @token = Token.find_by(value: token)
       if @token.nil?
         render_unauthorized
+      elsif @token.expiry.after?(DateTime.now) && @token.revocation_date.blank?
+        @current_user = @token.user
+        @current_user
       else
-        if @token.expiry.after?(DateTime.now) && @token.revocation_date.blank?
-          @current_user = @token.user
-          @current_user
-        else
-          render_unauthorized
-        end
+        render_unauthorized
       end
     end
   end
 
   def render_unauthorized
     logger.debug "*** UNAUTHORIZED REQUEST: '#{request.env['HTTP_AUTHORIZATION']}' ***"
-    headers['WWW-Authenticate'] = 'Token realm="Application"'
-    render json: { error: 'Bad credentials' }, status: 401 and return
+    headers["WWW-Authenticate"] = 'Token realm="Application"'
+    render json: { error: "Bad credentials" }, status: 401 and return
   end
 
   def ensure_required_params(required_params, passed_in_params)
