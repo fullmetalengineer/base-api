@@ -4,15 +4,15 @@
 module ServiceContract
   # Create the contractual return object
   def self.sign(success:, payload:, errors:)
-    OpenStruct.new({ success?: success, payload: payload, errors: convert_to_custom_error(errors) })
+    ServiceInterface.new({ success: success, payload: payload, errors: convert_to_custom_error(errors) })
   end
 
   def self.success(payload)
-    OpenStruct.new({ success?: true, payload: payload, errors: convert_to_custom_error(nil) })
+    ServiceInterface.new({ success: true, payload: payload, errors: convert_to_custom_error(nil) })
   end
 
   def self.error(errors)
-    OpenStruct.new({ success?: false, payload: nil, errors: convert_to_custom_error(errors) })
+    ServiceInterface.new({ success: false, payload: nil, errors: convert_to_custom_error(errors) })
   end
 
   # Convert a string, an array of strings, or a model's errors to a CustomError instance
