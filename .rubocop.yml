@@ -1,0 +1,83 @@
+---
+AllCops:
+  TargetRubyVersion: 3.1.2
+  NewCops: enable
+  Exclude:
+    - db/**/**/*.rb
+    - lib/tasks/**/*.rake
+
+Style/Documentation:
+  Enabled: false
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: true
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+# Commonly used screens these days easily fit more than 80 characters.
+Layout/LineLength:
+  Max: 360
+
+# No space makes the method definition shorter and differentiates
+# from a regular assignment.
+Layout/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+Metrics/AbcSize:
+  Max: 50
+
+Metrics/BlockLength:
+  Enabled: true
+  Exclude:
+    - config/routes.rb
+
+# The guiding principle of classes is SRP, SRP can't be accurately measured by LoC
+Metrics/ClassLength:
+  Max: 200
+  Exclude:
+    - test/controllers/api/**/*.rb
+
+# Too short methods lead to extraction of single-use methods, which can make
+# the code easier to read (by naming things), but can also clutter the class
+Metrics/MethodLength:
+  Max: 25
+
+Naming/PredicateName:
+  Enabled: false
+
+Naming/RescuedExceptionsVariableName:
+  PreferredName: err
+
+Naming/VariableNumber:
+  EnforcedStyle: snake_case
+  Exclude:
+    - config/routes.rb
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/HashSyntax:
+  EnforcedStyle: no_mixed_keys
+  EnforcedShorthandSyntax: never
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  Exclude:
+    - config/**/*.rb
+    - bin/*
+    - rakefile
+    - config.ru
+
+# Single quotes being faster is hardly measurable and only affects parse time.
+# Enforcing double quotes reduces the times where you need to change them
+# when introducing an interpolation. Use single quotes only if their semantics
+# are needed.
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/SymbolArray:
+  EnforcedStyle: brackets
